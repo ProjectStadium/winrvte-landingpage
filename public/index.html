@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WINRVTE - Esports Analytics Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5029ff;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --white: #fff;
+            --success-color: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            padding: 15px 0;
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+        
+        .sign-in-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 70px 0 50px;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+        
+        .hero-subtitle {
+            font-size: 16px;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .cta-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* Modal Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+        
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #999;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .modal-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        
+        .submit-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 14px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .submit-button:hover {
+            background-color: #4020e0;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            color: var(--success-color);
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .error-message {
+            display: none;
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        /* Checkbox styles for interests */
+        .checkbox-group {
+            margin-top: 12px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .checkbox-label {
+            font-size: 14px;
+        }
+        
+        /* Success state */
+        .form-success {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .success-icon {
+            color: var(--success-color);
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .success-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+        
+        .success-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        /* Showcase */
+        .showcase {
+            padding: 40px 0;
+            position: relative;
+        }
+        
+        .showcase-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .showcase-image {
+            width: 100%;
+            filter: grayscale(100%);
+        }
+        
+        .quote-bubble {
+            position: absolute;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 14px;
+        }
+        
+        .top-right {
+            top: -15px;
+            right: 20px;
+            max-width: 280px;
+        }
+        
+        .bottom-left {
+            bottom: 30px;
+            left: 10px;
+            max-width: 280px;
+        }
+        
+        .opportunity-text {
+            text-align: right;
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+            padding-right: 20px;
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background-color: var(--light-bg);
+        }
+        
+        .features-title {
+            font-size: 36px;
+            font-weight: 800;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 60px;
+            line-height: 1.2;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .feature-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+        
+        .feature-content {
+            padding: 15px;
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .feature-description {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Testimonial */
+        .testimonial {
+            padding: 80px 0;
+        }
+        
+        .testimonial-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 50px;
+        }
+        
+        .testimonial-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+        }
+        
+        .testimonial-image {
+            flex: 0 0 25%;
+        }
+        
+        .testimonial-image img {
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .testimonial-content {
+            flex: 0 0 65%;
+        }
+        
+        .testimonial-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            font-size: 14px;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        .roi-section {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+            gap: 20px;
+        }
+        
+        .roi-number {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+        
+        .roi-description {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .roi-description p:first-child {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        /* Case Studies */
+        .case-studies {
+            padding: 40px 0 60px;
+        }
+        
+        .case-studies-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .case-studies-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .case-studies-text {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .case-study-card {
+            display: flex;
+            background: var(--light-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .case-study-image {
+            flex: 0 0 20%;
+        }
+        
+        .case-study-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .case-study-content {
+            flex: 0 0 80%;
+            padding: 20px;
+        }
+        
+        .case-study-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .read-more-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        /* Newsletter */
+        .newsletter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+        
+        .newsletter-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .newsletter-form {
+            display: flex;
+        }
+        
+        .newsletter-input {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            width: 240px;
+            font-size: 14px;
+        }
+        
+        .newsletter-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--white);
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-links {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin-right: 40px;
+        }
+        
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .back-to-top {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        /* Bold Tagline */
+        .bold-tagline {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1;
+            padding: 80px 0;
+            text-align: center;
+            text-transform: uppercase;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            position: relative;
+            left: 0;
+            right: 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-container {
+                flex-direction: column;
+            }
+            
+            .case-study-card {
+                flex-direction: column;
+            }
+            
+            .newsletter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .bold-tagline {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">WINRVTE</div>
+                <ul class="nav-links">
+                    <li><a href="#">Players</a></li>
+                    <li><a href="#">Teams</a></li>
+                    <li><a href="#">Analysis</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Tournaments</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="#" class="active">Pricing</a></li>
+                </ul>
+                <button class="sign-in-btn">Sign In</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Find your edge.<br>Upset the competition.<br>Winning backed by data.</h1>
+            <p class="hero-subtitle">WINRVTE ("win-rate") is the moneyball solution for competitive gaming.</p>
+            <button class="cta-button" id="earlyAccessBtn">Request early access</button>
+        </div>
+    </section>
+
+    <!-- Early Access Modal -->
+    <div class="modal-overlay" id="earlyAccessModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h3 class="modal-title">Get Early Access to WINRVTE</h3>
+            <p class="modal-subtitle">Join our exclusive waitlist and be among the first to access our platform.</p>
+            
+            <!-- Sign-up Form -->
+            <form id="earlyAccessForm">
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">I am a: (Select one)</label>
+                    <select id="userType" name="userType" class="form-select" required>
+                        <option value="" disabled selected>Select your role...</option>
+                        <option value="Player">Player</option>
+                        <option value="Organization">Organization</option>
+                        <option value="Scout">Scout</option>
+                        <option value="Coach">Coach</option>
+                        <option value="Tournament Organizer">Tournament Organizer</option>
+                        <option value="Broadcaster">Broadcaster</option>
+                        <option value="Content Creator">Content Creator</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">I'm interested in: (Optional)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="playerData" name="interests" value="Player Data">
+                            <label for="playerData" class="checkbox-label">Player Data & Analytics</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="teamAnalytics" name="interests" value="Team Analytics">
+                            <label for="teamAnalytics" class="checkbox-label">Team Performance Analytics</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scoutingTools" name="interests" value="Scouting Tools">
+                            <label for="scoutingTools" class="checkbox-label">Scouting & Recruitment Tools</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="broadcastTools" name="interests" value="Broadcast Tools">
+                            <label for="broadcastTools" class="checkbox-label">Broadcast & Visualization Tools</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="referral" class="form-label">How did you hear about us? (Optional)</label>
+                    <select id="referral" name="referral" class="form-select">
+                        <option value="" disabled selected>Select an option...</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Friend">Friend or Colleague</option>
+                        <option value="Event">Esports Event</option>
+                        <option value="Search">Search Engine</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-button">Join Waitlist</button>
+                <p class="success-message" id="formSuccessMessage">Thanks! Your submission was successful.</p>
+                <p class="error-message" id="formErrorMessage">There was a problem submitting your form. Please try again.</p>
+            </form>
+            
+            <!-- Success State (Initially Hidden) -->
+            <div class="form-success" id="formSuccess" style="display:none;">
+                <div class="success-icon">✓</div>
+                <h4 class="success-title">You're on the list!</h4>
+                <p class="success-description">Thank you for your interest in WINRVTE. We'll be in touch soon with exclusive early access details.</p>
+                <button class="submit-button" id="closeSuccessBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Showcase Section -->
+    <section class="showcase">
+        <div class="container">
+            <div class="showcase-content">
+                <img src="/api/placeholder/800/500" alt="Esports players celebrating" class="showcase-image">
+                <div class="quote-bubble top-right">
+                    <p>BLVKHVND Esports placed 3rd in the 2023 APAC Female Global Championship</p>
+                </div>
+                <div class="quote-bubble bottom-left">
+                    <p>Dropped by an org last season? Be viewed among the Most Desirable Player of the event.</p>
+                </div>
+            </div>
+            <p class="opportunity-text">And many more cases, if given the opportunity.</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="features-title">A stats oracle for esports fans, players,<br>teams, and tourney orgs. Scout, build,<br>develop and win off the data.</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="/api/placeholder/300/300" alt="Player analytics dashboard">
+                    <div class="feature-content">
+                        <h3 class="feature-title">For competitive players–find all free agents</h3>
+                        <p class="feature-description">Get discovered for your talent and the intangibles that separate you from the rest.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="/api/placeholder/300/300" alt="Scout analytics">
+                    <div class="feature-content">
+                        <h3 class="feature-title">For scouts–find the hidden gems before anyone else</h3>
+                        <p class="feature-description">Dig into our reports. Front-run the competition with players the world has yet to see.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="/api/placeholder/300/300" alt="Coach analytics">
+                    <div class="feature-content">
+                        <h3 class="feature-title">For coaches + analysts–build the perfect roster</h3>
+                        <p class="feature-description">Discover how data can sharpen your edge—or uncover the players that will.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="/api/placeholder/300/300" alt="Caster analytics">
+                    <div class="feature-content">
+                        <h3 class="feature-title">For Casters–tell the stories no one knows</h3>
+                        <p class="feature-description">Wow audiences new and old with a range of expressive graphics built off our data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="testimonial">
+        <div class="container">
+            <h2 class="testimonial-title">Backed by esports orgs, built by them too.</h2>
+            
+            <div class="testimonial-container">
+                <div class="testimonial-image">
+                    <img src="/api/placeholder/200/200" alt="BLVKHVND Founder">
+                </div>
+                
+                <div class="testimonial-content">
+                    <blockquote class="testimonial-text">
+                        "My experience building BLVKHVND has given me firsthand insight into the massive inefficiencies in esports talent evaluation—and the opportunity to solve them. That's why we created WINRVTE."
+                        <cite class="testimonial-author">Amber Dalton (Athena), Co-Founder of BLVKHVND</cite>
+                    </blockquote>
+                    
+                    <div class="roi-section">
+                        <div class="roi-number">6.25x</div>
+                        <div class="roi-description">
+                            <p>RETURN ON INVESTMENT</p>
+                            <p>An eSPORTS brand 2.5x in value for the competitive teams, in place 3rd in League scoring 250k.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="case-studies">
+        <div class="container">
+            <div class="case-studies-header">
+                <h3 class="case-studies-title">Player Case Studies</h3>
+                <p class="case-studies-text">Learn about the unique stories WINRVTE has helped create</p>
+            </div>
+            
+            <div class="case-study-card">
+                <div class="case-study-image">
+                    <img src="/api/placeholder/200/200" alt="Case study players">
+                </div>
+                <div class="case-study-content">
+                    <h4 class="case-study-title">2 nobies shake the Valorant scene making the VCT EMEA Game Changers Grand Finals Play</h4>
+                    <a href="#" class="read-more-btn">Read More</a>
+                </div>
+            </div>
+
+            <!-- Newsletter Signup -->
+            <div class="newsletter">
+                <div class="newsletter-title">
+                    Get the latest news and updates from WINRVTE
+                </div>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email address" class="newsletter-input">
+                    <button type="submit" class="newsletter-button">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Analysis</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Glossary</a></li>
+                </ul>
+                
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Teams</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 HWNTKTEK LTD. WINRVTE Sports Group. All rights reserved.</p>
+                <a href="#" class="back-to-top">Back to Top ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Modal and Form Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const earlyAccessBtn = document.getElementById('earlyAccessBtn');
+            const modalOverlay = document.getElementById('earlyAccessModal');
+            const modalClose = document.getElementById('modalClose');
+            const earlyAccessForm = document.getElementById('earlyAccessForm');
+            const formSuccess = document.getElementById('formSuccess');
+            const formSuccessMessage = document.getElementById('formSuccessMessage');
+            const formErrorMessage = document.getElementById('formErrorMessage');
+            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+            
+            // Open modal when CTA button is clicked
+            earlyAccessBtn.addEventListener('click', function() {
+                modalOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+            
+            // Close modal when X button is clicked
+            modalClose.addEventListener('click', function() {
+                modalOverlay.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Allow scrolling
+                resetForm();
+            });
+            
+            // Close modal when clicking outside the modal
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('show');
+                    document.body.style.overflow = 'auto'; // Allow scrolling
+                    resetForm();
+                }
+            });
+            
+            // Close success message and modal
+            closeSuccessBtn.addEventListener('click', function() {
+                modalOverlay.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Allow scrolling
+                resetForm();
+            });
+            
+            // Handle form submission
+            earlyAccessForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Hide any previous error messages
+                formErrorMessage.style.display = 'none';
+                
+                // Get form data
+                const formData = new FormData(earlyAccessForm);
+                const formDataObj = Object.fromEntries(formData.entries());
+                
+                // Get multiple selections for interests (checkboxes)
+                formDataObj.interests = Array.from(document.querySelectorAll('input[name="interests"]:checked'))
+                    .map(checkbox => checkbox.value)
+                    .join(', ');
+                
+                // Add timestamp
+                formDataObj.timestamp = new Date().toISOString();
+                
+                // Log the form data (in a real implementation, you would send this to your server/API)
+                console.log('Form Data:', formDataObj);
+                
+                // Create a CSV row for Notion
+                const csvData = [
+                    formDataObj.timestamp,
+                    formDataObj.name,
+                    formDataObj.email,
+                    formDataObj.userType,
+                    formDataObj.interests,
+                    formDataObj.referral || 'Not specified'
+                ].join(',');
+                
+                console.log('CSV Row:', csvData);
+                
+                // Simulate API call to your Notion integration
+                // In a real implementation, you would replace this with a fetch call to your server
+                setTimeout(function() {
+                    // Show success message (simulating successful submission)
+                    earlyAccessForm.style.display = 'none';
+                    formSuccess.style.display = 'block';
+                    
+                    // In a real implementation, you would have error handling here
+                    // If the API call fails, show error message:
+                    // formErrorMessage.style.display = 'block';
+                }, 1000);
+            });
+            
+            // Reset form and hide success/error messages
+            function resetForm() {
+                earlyAccessForm.reset();
+                earlyAccessForm.style.display = 'block';
+                formSuccess.style.display = 'none';
+                formSuccessMessage.style.display = 'none';
+                formErrorMessage.style.display = 'none';
+            }
+            
+            // Form validation
+            const emailInput = document.getElementById('email');
+            emailInput.addEventListener('input', function() {
+                if (emailInput.validity.valid) {
+                    emailInput.setCustomValidity('');
+                } else if (emailInput.validity.valueMissing) {
+                    emailInput.setCustomValidity('Please enter your email address');
+                } else {
+                    emailInput.setCustomValidity('Please enter a valid email address');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
