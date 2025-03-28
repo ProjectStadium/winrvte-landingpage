@@ -1,0 +1,24 @@
+{
+    "name": "winrvte-landing",
+    "version": "1.0.0",
+    "description": "WINRVTE esports analytics platform",
+    "main": "index.js",
+    "scripts": {
+      "start": "netlify dev",
+      "build": "echo 'No build step needed'",
+      "dev": "netlify dev"
+    },
+    "keywords": [
+      "esports",
+      "analytics",
+      "landing-page"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@notionhq/client": "^2.2.5"
+    },
+    "devDependencies": {
+      "netlify-cli": "^15.4.1"
+    }
+  }
